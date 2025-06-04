@@ -1,0 +1,35 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Run Go tests",
+			"command": "go test ./...",
+			"group": "test",
+			"problemMatcher": [
+				"$go"
+			]
+		},
+		{
+			"label": "Run Server",
+			"type": "shell",
+			"command": "go run ./cmd/server/main.go",
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Migration",
+			"type": "shell",
+			"command": "go run ./cmd/migration/migration.go",
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Seeder",
+			"type": "shell",
+			"command": "go run ./cmd/seeder/seeder.go",
+			"group": "build",
+			"problemMatcher": []
+		}
+	]
+}
