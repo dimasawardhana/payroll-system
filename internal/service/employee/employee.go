@@ -127,7 +127,11 @@ func (s *EmployeeService) SubmitOvertime(ctx context.Context, payload dto.Overti
 	overtime.EmployeeID = payload.EmployeeID
 	overtime.Hours = payload.Hours
 	currentTime := time.Now()
-	overtime.Date = currentTime
+	payloadDate, err := time.Parse("2006-01-02", payload.Date)
+	if err != nil {
+		return error_const.ErrInvalidDateFormat
+	}
+	overtime.Date = payloadDate
 	overtime.CreatedAt = currentTime
 	overtime.UpdatedAt = currentTime
 	overtime.CreatedBy = payload.EmployeeEmail
@@ -152,6 +156,11 @@ func (s *EmployeeService) SubmitReimbursement(ctx context.Context, payload dto.R
 	reimbursement.EmployeeID = payload.EmployeeID
 	reimbursement.Amount = payload.Amount
 	reimbursement.Description = payload.Description
+	payloadDate, err := time.Parse("2006-01-02", payload.Date)
+	if err != nil {
+		return error_const.ErrInvalidDateFormat
+	}
+	reimbursement.Date = payloadDate
 	currentTime := time.Now()
 	reimbursement.CreatedAt = currentTime
 	reimbursement.UpdatedAt = currentTime

@@ -185,15 +185,6 @@ func (r *PayrollRepository) CreatePayrollPeriod(ctx context.Context, payroll dom
 	return payrollID, nil
 }
 
-func (r *PayrollRepository) ViewPayrollSummary(periodID string) (interface{}, error) {
-	// Implement logic to retrieve payroll summary for a specific period
-	// This is a placeholder implementation
-	if periodID == "" {
-		return nil, nil // Return an error or empty summary if period ID is invalid
-	}
-	return nil, nil
-}
-
 func (r *PayrollRepository) GetEmployeePayslipByPeriod(ctx context.Context, _payroll domain.Payroll) (domain.Payroll, error) {
 	if _payroll.EmployeeID == 0 || _payroll.PeriodID == 0 {
 		return domain.Payroll{}, error_const.ErrInvalidUser

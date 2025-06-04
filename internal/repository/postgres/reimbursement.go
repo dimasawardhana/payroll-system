@@ -66,7 +66,7 @@ func (r *ReimbursementRepository) GetReimbursementsByEmployeeID(ctx context.Cont
 func (r *ReimbursementRepository) GetAllReimbursementsFromDateRange(ctx context.Context, startDate, endDate string) ([]domain.Reimbursement, error) {
 	rows, err := r.pool.Query(ctx, `
 		SELECT id, employee_id, amount, description, date, created_at, updated_at, created_by, updated_by
-		FROM reimbursements WHERE created_at BETWEEN $1 AND $2
+		FROM reimbursements WHERE date BETWEEN $1 AND $2
 	`, startDate, endDate)
 	if err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func (r *ReimbursementRepository) GetEmployeeReimbursementByDateRange(ctx contex
 
 	rows, err := r.pool.Query(ctx, `
 		SELECT id, employee_id, amount, description, date, created_at, updated_at, created_by, updated_by
-		FROM reimbursements WHERE employee_id = $1 AND created_at BETWEEN $2 AND $3
+		FROM reimbursements WHERE employee_id = $1 AND date BETWEEN $2 AND $3
 	`, employeeID, startDate, endDate)
 	if err != nil {
 		return nil, err
@@ -119,8 +119,8 @@ func (r *ReimbursementRepository) GetReimbursementsGroupedByEmployeeID(ctx conte
 	rows, err := r.pool.Query(ctx, `
 		SELECT id, employee_id, amount, description, date, created_at, updated_at, created_by, updated_by
 		FROM reimbursements
-		WHERE created_at BETWEEN $1 AND $2
-		ORDER BY employee_id, created_at
+		WHERE date BETWEEN $1 AND $2
+		ORDER BY employee_id, date
 	`, startDate, endDate)
 	if err != nil {
 		return nil, err

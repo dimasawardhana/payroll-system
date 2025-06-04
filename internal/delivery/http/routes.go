@@ -54,6 +54,6 @@ func RegisterEmployeeRoutes(router *gin.RouterGroup, employeeHandler *handler.Em
 		employeeGroup.POST("/attendance", employeeHandler.EmployeeAttendanceHandler)
 		employeeGroup.POST("/overtime", employeeHandler.EmployeeOvertimeSubmissionHandler)
 		employeeGroup.POST("/reimbursement", employeeHandler.EmployeeReimbursementHandler)
-		employeeGroup.GET("/payslip/:id", employeeHandler.EmployeePayslipHandler)
+		employeeGroup.GET("/payslip/:period_id", employeeHandler.EmployeePayslipHandler)
 	}
 }

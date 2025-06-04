@@ -154,7 +154,17 @@ go test ./...
   { "message": "Payroll run started", "data": null }
   ```
 
-#### GET /api/v1/admin/payroll-summary/:id
+#### POST /api/v1/admin/payroll-period/lock
+- **Body:**
+  ```json
+  { "period_id": 1 }
+  ```
+- **Response:**
+  ```json
+  { "message": "Payroll period locked", "data": null }
+  ```
+
+#### GET /api/v1/admin/payroll-summary/:period_id
 - **Response:**
   ```json
   { "message": "Payroll summary retrieved successfully", "data": { /* summary object */ } }
@@ -194,32 +204,19 @@ go test ./...
   { "message": "Reimbursement submitted successfully", "data": null }
   ```
 
-#### POST /api/v1/employee/payslip
-- **Body:**
-  ```json
-  { "period_id": 202401 }
-  ```
+#### GET /api/v1/employee/payslip/:period_id
 - **Response:**
   ```json
-  {
-    "message": "Payslip retrieved successfully",
-    "data": {
-      "employee_id": 1,
-      "period_id": 202401,
-      "basic_salary": 5000000,
-      "overtime": 200000,
-      "deductions": 100000,
-      "net_salary": 5100000
-    }
-  }
+  { "message": "Payslip retrieved successfully", "data": { /* payslip object */ } }
   ```
 
 ---
 
 ### Error Response (all endpoints)
-```json
-{ "message": "Error message", "error": "error details" }
-```
+- **Format:**
+  ```json
+  { "message": "error message", "error": "error details" }
+  ```
 
 ---
 

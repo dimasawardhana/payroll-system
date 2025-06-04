@@ -4,6 +4,7 @@ import (
 	"payroll-system/internal/delivery/dto"
 	employee_service "payroll-system/internal/service/employee"
 	"payroll-system/internal/utils"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -92,8 +93,17 @@ func (h *EmployeeHandler) EmployeeReimbursementHandler(c *gin.Context) {
 }
 func (h *EmployeeHandler) EmployeePayslipHandler(c *gin.Context) {
 	var payslipPayload dto.PayrollRequest
-	if err := c.ShouldBindJSON(&payslipPayload); err != nil {
-		c.JSON(400, dto.NewErrorResponse("Invalid request", err))
+	periodIdStr := c.Param("period_id")
+
+	periodID, err := strconv.Atoi(periodIdStr)
+	if err != nil {
+		c.JSON(400, dto.NewErrorResponse("Invalid period ID", err))
+		return
+	}
+	payslipPayload.PeriodID = periodID
+
+	if payslipPayload.PeriodID == 0 {
+		c.JSON(400, dto.NewErrorResponse("Period ID is required", nil))
 		return
 	}
 	claims, err := utils.GetClaimsFromJWTUsingContext(c)
@@ -103,6 +113,7 @@ func (h *EmployeeHandler) EmployeePayslipHandler(c *gin.Context) {
 	}
 	payslipPayload.EmployeeID = claims.UserID
 	payslipPayload.ActorEmail = claims.Email
+
 	payslip, err := h.empService.GetPayslip(c.Request.Context(), payslipPayload)
 	if err != nil {
 		c.JSON(500, dto.NewErrorResponse("Failed to retrieve payslip", err))

@@ -25,8 +25,8 @@ func (r *EmployeeRepository) GetEmployee(ctx context.Context, credential domain.
 	}
 
 	err := r.pool.
-		QueryRow(ctx, "SELECT id, email, password_hash, role FROM employees WHERE email = $1", credential.Email).
-		Scan(&employee.ID, &employee.Email, &employee.Password_hash, &employee.Role)
+		QueryRow(ctx, "SELECT id, name, email, password_hash, role, salary FROM employees WHERE email = $1", credential.Email).
+		Scan(&employee.ID, &employee.Name, &employee.Email, &employee.Password_hash, &employee.Role, &employee.Salary)
 
 	if err != nil {
 		return domain.Employee{}, err
@@ -37,7 +37,7 @@ func (r *EmployeeRepository) GetEmployee(ctx context.Context, credential domain.
 	return employee, nil
 }
 func (r *EmployeeRepository) GetAllEmployees(ctx context.Context) ([]domain.Employee, error) {
-	rows, err := r.pool.Query(ctx, "SELECT id, email, password_hash, role FROM employees")
+	rows, err := r.pool.Query(ctx, "SELECT id, name, email, password_hash, role, salary FROM employees")
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (r *EmployeeRepository) GetAllEmployees(ctx context.Context) ([]domain.Empl
 	var employees []domain.Employee
 	for rows.Next() {
 		var employee domain.Employee
-		err := rows.Scan(&employee.ID, &employee.Email, &employee.Password_hash, &employee.Role)
+		err := rows.Scan(&employee.ID, &employee.Name, &employee.Email, &employee.Password_hash, &employee.Role, &employee.Salary)
 		if err != nil {
 			return nil, err
 		}
@@ -66,13 +66,13 @@ func (r *EmployeeRepository) GetPayslip(employeeID string, period string) (inter
 
 func (r *EmployeeRepository) GetEmployeeByID(ctx context.Context, employeeID int) (*domain.Employee, error) {
 	row := r.pool.QueryRow(ctx, `
-		SELECT id, email, password_hash, role
+		SELECT id, name, email, password_hash, role, salary
 		FROM employees
 		WHERE id = $1
 	`, employeeID)
 
 	var e domain.Employee
-	if err := row.Scan(&e.ID, &e.Email, &e.Password_hash, &e.Role); err != nil {
+	if err := row.Scan(&e.ID, &e.Name, &e.Email, &e.Password_hash, &e.Role, &e.Salary); err != nil {
 		return nil, err
 	}
 	return &e, nil
